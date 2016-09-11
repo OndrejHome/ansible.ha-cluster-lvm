@@ -1,0 +1,4 @@
+shared_drive: '/dev/disk/by-path/ip-192.168.34.153:3260-iscsi-iqn.1994-05.com.redhat:target-lun-0'
+cluster_vg_name: "cluster_vg"
+HALVMtype: "tagging"
+local_volume_list: '"c6vg"'

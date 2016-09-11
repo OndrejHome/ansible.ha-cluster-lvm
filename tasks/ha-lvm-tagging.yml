@@ -1,0 +1,22 @@
+---
+- name: disable and stop clvmd service
+  service: name=clvmd enabled=no state=stopped
+
+- name: enable locking_type=1
+  lineinfile: dest=/etc/lvm/lvm.conf regexp="^\s*locking_type" line="        locking_type = 1"
+  notify:  rebuild initramfs
+
+- name: EL6 set the volume_list in /etc/lvm/lvm.conf
+  lineinfile:  dest=/etc/lvm/lvm.conf state=present regexp="^\s+volume_list" line='        volume_list=[{{ local_volume_list }}, "@{{ansible_fqdn.split('.')[0] }}"]' insertafter="^activation {"
+  when: ansible_distribution_major_version == "6"
+  notify:  rebuild initramfs
+
+# EL7 untested !!!
+- name: EL7 set the volume_list in /etc/lvm/lvm.conf
+  lineinfile:  dest=/etc/lvm/lvm.conf state=present regexp="^\s+volume_list" line='        volume_list=[{{ local_volume_list }}]' insertafter="^activation {"
+  when: ansible_distribution_major_version == "7"
+  notify: rebuild initramfs
+
+- name: create VG
+  lvg: pvs={{ shared_drive }} state=present vg={{ cluster_vg_name }} vg_options=" -cn"
+  run_once: true

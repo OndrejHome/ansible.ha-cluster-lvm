@@ -1,0 +1,11 @@
+---
+## check if storage is where it should be
+
+## setup HA-LVM tagging
+- name: Setup HA-LVM tagging
+  include: ha-lvm-tagging.yml
+  when: HALVMtype == "tagging"
+
+- name: Setup HA-LVM CLVM
+  include: ha-lvm-clvm.yml
+  when: HALVMtype == "clvm"

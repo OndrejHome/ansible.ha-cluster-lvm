@@ -1,0 +1,21 @@
+---
+- name: Install packages for CLVM
+  yum: name=lvm2-cluster state=installed
+
+- name: enable clvmd service
+  service: name=clvmd enabled=yes
+
+- name: start clvmd service
+  service: name=clvmd state=started
+
+- name: enable locking_type=3
+  lineinfile: dest=/etc/lvm/lvm.conf regexp="^\s*locking_type" line="        locking_type = 3"
+  notify:  rebuild initramfs
+
+- name: comment out volume_list options from lvm.conf
+  lineinfile: dest=/etc/lvm/lvm.conf backrefs=yes regexp="^\s*volume_list(.*)$" line="        {{'#'}}volume_list\1"
+  notify:  rebuild initramfs
+
+- name: create VG
+  lvg: pvs={{ shared_drive }} state=present vg={{ cluster_vg_name }} vg_options=" -cy"
+  run_once: true
