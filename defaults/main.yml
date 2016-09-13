@@ -1,4 +1,12 @@
+# Path to device shared between nodes, the path must be same on both nodes
 shared_drive: '/dev/disk/by-path/ip-192.168.34.153:3260-iscsi-iqn.1994-05.com.redhat:target-lun-0'
+
+# name of VG that will be clustered between nodes
 cluster_vg_name: "cluster_vg"
+
+# type of HA-LVM, possible options are 'tagging'(default) or 'clvm'
 HALVMtype: "tagging"
+
+# list of VGs enclosed in '"' and separated by ',', this will become part of 'volume_list'
+# variable in /etc/lvm/lvm.conf
 local_volume_list: '"c6vg"'
