@@ -6,6 +6,10 @@
 - fail: msg="Shared device doesn't exist on on node"
   when: shared_device_check.stat.exists != True
 
+- name: Check if cluster_type is defined when running EL6
+  fail: msg="cluster_type must be defined on EL6 for tagging variant"
+  when: ansible_distribution_major_version == "6" and not cluster_type and HALVMtype == "tagging"
+
 ## setup HA-LVM tagging
 - name: Setup HA-LVM tagging
   include: ha-lvm-tagging.yml

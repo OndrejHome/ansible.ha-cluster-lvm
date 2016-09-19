@@ -36,6 +36,12 @@ Role Variables
     local_volume_list: '"c6vg"'
     ```
 
+  - (EL6 with tagging) type of running cluster is required to determine correct volume_list. Only 2 possible options are 'pacemaker' and 'rgmanager'. Default is unset.
+    ```
+    cluster_type: 'rgmanager'
+    ```
+
+
 Example Playbook
 ----------------
 

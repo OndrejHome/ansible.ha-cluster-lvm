@@ -10,3 +10,6 @@ HALVMtype: "tagging"
 # list of VGs enclosed in '"' and separated by ',', this will become part of 'volume_list'
 # variable in /etc/lvm/lvm.conf
 local_volume_list: '"c6vg"'
+
+# (EL6 only) Type of cluster that will use this HA-LVM. Either 'pacemaker' or 'rgmanager'
+# cluster_type: 'rgmanager'
