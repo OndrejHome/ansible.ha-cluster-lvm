@@ -15,4 +15,5 @@ galaxy_info:
   - clustering:rgmanager
   - clustering:pacemaker
   - clustering:halvm
-dependencies: []
+dependencies:
+  - { role: OndrejHome.pcs-modules }
