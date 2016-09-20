@@ -12,11 +12,23 @@
 
 - name: enable clvmd service
   service: name=clvmd enabled=yes
+  when: ansible_distribution_major_version < "7"
 
 - name: start clvmd service
   service: name=clvmd state=started
+  when: ansible_distribution_major_version < "7"
 
+# FIXME pcs_resource doesn't support cloned resources yet
+- name: create controld pacemaker resource
+  pcs_resource: name="controld" resource_type="controld" options="--clone"
+  when: ansible_distribution_major_version == "7"
+  run_once: true
 
+# FIXME pcs_resource doesn't support cloned resources yet
+- name: create clvm pacemaker resource
+  pcs_resource: name="clvm" resource_type="clvm" options="--clone"
+  when: ansible_distribution_major_version == "7"
+  run_once: true
 
 - name: create VG
   lvg: pvs={{ shared_drive }} state=present vg={{ cluster_vg_name }} vg_options=" -cy"
