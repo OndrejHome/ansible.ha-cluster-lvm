@@ -13,7 +13,9 @@
 ## disable LVM metadata service
 - name: disable use_lvmetad in /etc/lvm/lvm.conf if it exists
   lineinfile:  dest=/etc/lvm/lvm.conf regexp="^\s+use_lvmetad" line='        use_lvmetad = 0'
-  notify:  rebuild initramfs
+  notify:
+    - rebuild initramfs
+    - rebuild initrd
 
 - name: Disable lvm2-lvmetad service
   service: name=lvm2-lvmetad enabled=no state=stopped

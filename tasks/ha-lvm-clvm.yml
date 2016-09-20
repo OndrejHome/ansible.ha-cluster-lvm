@@ -4,11 +4,15 @@
 
 - name: enable locking_type=3
   lineinfile: dest=/etc/lvm/lvm.conf regexp="^\s*locking_type" line="        locking_type = 3"
-  notify: rebuild initramfs
+  notify:
+    - rebuild initramfs
+    - rebuild initrd
 
 - name: comment out volume_list options from lvm.conf
   lineinfile: dest=/etc/lvm/lvm.conf backrefs=yes regexp="^\s*volume_list(.*)$" line="        {{'#'}}volume_list\1"
-  notify: rebuild initramfs
+  notify:
+    - rebuild initramfs
+    - rebuild initrd
 
 - name: enable clvmd service
   service: name=clvmd enabled=yes
