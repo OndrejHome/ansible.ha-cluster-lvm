@@ -22,15 +22,13 @@
   service: name=clvmd state=started
   when: ansible_distribution_major_version < "7"
 
-# FIXME pcs_resource doesn't support cloned resources yet
 - name: create controld pacemaker resource
-  pcs_resource: name="controld" resource_type="controld" options="--clone"
+  pcs_resource: name="controld" resource_type="controld" clone_resource="True" options=""
   when: ansible_distribution_major_version == "7"
   run_once: true
 
-# FIXME pcs_resource doesn't support cloned resources yet
 - name: create clvm pacemaker resource
-  pcs_resource: name="clvm" resource_type="clvm" options="--clone"
+  pcs_resource: name="clvm" resource_type="clvm" clone_resource="True" options=""
   when: ansible_distribution_major_version == "7"
   run_once: true
 
