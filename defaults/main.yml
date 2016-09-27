@@ -7,9 +7,13 @@ cluster_vg_name: "cluster_vg"
 # type of HA-LVM, possible options are 'tagging'(default) or 'clvm'
 HALVMtype: "tagging"
 
-# list of VGs enclosed in '"' and separated by ',', this will become part of 'volume_list'
-# variable in /etc/lvm/lvm.conf
-local_volume_list: '"c6vg"'
+# list of VGs enclosed in '"' and separated by ','. This will become part of 'volume_list'
+# variable in /etc/lvm/lvm.conf and must end with ','!
+# (default) - expression below detects all VGs on system and use them (available since Ansible 2.0)
+local_volume_list: "{% for i in ansible_lvm['vgs'] %}\"{{ i }}\", {% endfor %}"
+# some examples
+# local_volume_list: '"root_vg", '
+# local_volume_list: '"root_vg", "data_vg", '
 
 # (EL6 only) Type of cluster that will use this HA-LVM. Either 'pacemaker' or 'rgmanager'
 # cluster_type: 'rgmanager'

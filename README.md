@@ -30,10 +30,10 @@ Role Variables
     HALVMtype: "tagging"
     ```
 
-  - list of VGs enclosed in '"' and separated by ',', this will become part of 'volume_list' variable in /etc/lvm/lvm.conf. NOTE: this setting is ignored whe the HALVMtype is 'clvm' as the 'volume_list' gets commented out.
+  - list of VGs enclosed in '"' and separated by ','. This will become part of 'volume_list' variable in /etc/lvm/lvm.conf and must end with ','!. NOTE: this setting is ignored whe the HALVMtype is 'clvm' as the 'volume_list' gets commented out.
   
     ```
-    local_volume_list: '"c6vg"'
+    local_volume_list: '"c6vg",'
     ```
 
   - (EL6 with tagging) type of running cluster is required to determine correct volume_list. Only 2 possible options are 'pacemaker' and 'rgmanager'. Default is unset.

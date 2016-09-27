@@ -11,20 +11,20 @@
     - rebuild initrd
 
 - name: EL5-6 (rgmanager) set the volume_list in /etc/lvm/lvm.conf
-  lineinfile:  dest=/etc/lvm/lvm.conf state=present regexp="^\s+volume_list" line='        volume_list=[{{ local_volume_list }}, "@{{ansible_fqdn.split('.')[0] }}"]' insertafter="^activation {"
+  lineinfile:  dest=/etc/lvm/lvm.conf state=present regexp="^\s+volume_list" line='        volume_list=[{{ local_volume_list }} "@{{ansible_fqdn.split('.')[0] }}"]' insertafter="^activation {"
   when: (ansible_distribution_major_version == "6" and cluster_type == "rgmanager") or ansible_distribution_major_version == "5"
   notify:
     - rebuild initramfs
     - rebuild initrd
 
 - name: EL6 (pacemaker) set the volume_list in /etc/lvm/lvm.conf
-  lineinfile:  dest=/etc/lvm/lvm.conf state=present regexp="^\s+volume_list" line='        volume_list=[{{ local_volume_list }}, "@pacemaker"]' insertafter="^activation {"
+  lineinfile:  dest=/etc/lvm/lvm.conf state=present regexp="^\s+volume_list" line='        volume_list=[{{ local_volume_list }} "@pacemaker"]' insertafter="^activation {"
   when: ansible_distribution_major_version == "6" and cluster_type == "pacemaker"
   notify:  rebuild initramfs
 
 # EL7 untested !!!
 - name: EL7 (pacemaker) set the volume_list in /etc/lvm/lvm.conf
-  lineinfile:  dest=/etc/lvm/lvm.conf state=present regexp="^\s+volume_list" line='        volume_list=[{{ local_volume_list }}]' insertafter="^activation {"
+  lineinfile:  dest=/etc/lvm/lvm.conf state=present regexp="^\s+volume_list" line='        volume_list=[{{ local_volume_list }} "" ]' insertafter="^activation {"
   when: ansible_distribution_major_version == "7"
   notify: rebuild initramfs
 
