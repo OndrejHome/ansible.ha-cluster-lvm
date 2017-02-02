@@ -16,4 +16,4 @@ galaxy_info:
   - clustering:pacemaker
   - clustering:halvm
 dependencies:
-  - { role: OndrejHome.pcs-modules }
+  - { role: OndrejHome.pcs-modules-2 }

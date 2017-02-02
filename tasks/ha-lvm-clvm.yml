@@ -23,12 +23,17 @@
   when: ansible_distribution_major_version < "7"
 
 - name: create controld pacemaker resource
-  pcs_resource: name="controld" resource_type="controld" clone_resource="True" options=""
+  pcs_resource: name="controld" resource_type="controld" options="clone interleave=true ordered=true"
   when: ansible_distribution_major_version == "7"
   run_once: true
 
 - name: create clvm pacemaker resource
-  pcs_resource: name="clvm" resource_type="clvm" clone_resource="True" options=""
+  pcs_resource: name="clvm" resource_type="clvm" options="clone interleave=true ordered=true"
+  when: ansible_distribution_major_version == "7"
+  run_once: true
+
+- name: Ensure that controld resource starts before clvm resource
+  pcs_constraint: constraint_type="order" resource1="controld-clone" resource2="clvm-clone"
   when: ansible_distribution_major_version == "7"
   run_once: true
 
