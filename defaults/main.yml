@@ -17,3 +17,8 @@ local_volume_list: "{% for i in ansible_lvm['vgs'] %}\"{{ i }}\", {% endfor %}"
 
 # (EL6 only) Type of cluster that will use this HA-LVM. Either 'pacemaker' or 'rgmanager'
 # cluster_type: 'rgmanager'
+
+# (RHEL only) enable repositories(channels) containing the packages needed.
+# by default only Resilient Storage is enabled when CLVMD should be used
+enable_repos: true
+enable_eus_repos: false

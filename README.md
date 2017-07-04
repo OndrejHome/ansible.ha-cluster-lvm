@@ -41,6 +41,16 @@ Role Variables
     cluster_type: 'rgmanager'
     ```
 
+  - (RHEL only) enable the repositories containint packages needed
+    ```
+    enable_repos: true
+    ```
+
+  - (RHEL only) enable the extended update (EUS) repositories containint packages needed
+    ```
+    enable_eus_repos: false
+    ```
+
 
 Example Playbook
 ----------------
