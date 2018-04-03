@@ -1,41 +1,31 @@
 ---
 - name: enable HA/RS repository
   command: subscription-manager repos --enable="rhel-rs-for-rhel-{{ ansible_distribution_major_version }}-server-rpms"
-  when: enable_repos == true
+  when: enable_repos == true and ansible_distribution == 'RedHat'
 
 - name: enable HA/RS EUS repository
   command: subscription-manager repos --enable="rhel-rs-for-rhel-{{ ansible_distribution_major_version }}-server-eus-rpms"
-  when: enable_eus_repos == true
+  when: enable_eus_repos == true and ansible_distribution == 'RedHat'
 
 - name: Install packages for CLVM
   yum: name=lvm2-cluster state=installed
 
-- name: enable locking_type=3
+- name: Enable locking_type=3
   lineinfile: dest=/etc/lvm/lvm.conf regexp="^\s*locking_type" line="        locking_type = 3"
   notify:
     - rebuild initramfs
     - rebuild initrd
 
-- name: comment out volume_list options from lvm.conf
-  lineinfile: dest=/etc/lvm/lvm.conf backrefs=yes regexp="^\s*volume_list(.*)$" line="        {{'#'}}volume_list\1"
-  notify:
-    - rebuild initramfs
-    - rebuild initrd
-
-- name: enable clvmd service
-  service: name=clvmd enabled=yes
+- name: Enable and start clvmd service
+  service: name=clvmd enabled=yes state=started
   when: ansible_distribution_major_version < "7"
 
-- name: start clvmd service
-  service: name=clvmd state=started
-  when: ansible_distribution_major_version < "7"
-
-- name: create controld pacemaker resource
+- name: Create controld pacemaker resource
   pcs_resource: name="controld" resource_type="controld" options="clone interleave=true ordered=true"
   when: ansible_distribution_major_version == "7"
   run_once: true
 
-- name: create clvm pacemaker resource
+- name: Create clvm pacemaker resource
   pcs_resource: name="clvm" resource_type="clvm" options="clone interleave=true ordered=true"
   when: ansible_distribution_major_version == "7"
   run_once: true
@@ -43,8 +33,4 @@
 - name: Ensure that controld resource starts before clvm resource
   pcs_constraint_order: resource1="controld-clone" resource2="clvm-clone"
   when: ansible_distribution_major_version == "7"
-  run_once: true
-
-- name: create VG
-  lvg: pvs={{ shared_drive }} state=present vg={{ cluster_vg_name }} vg_options=" -cy"
   run_once: true

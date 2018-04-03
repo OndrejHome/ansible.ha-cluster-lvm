@@ -1,28 +1,16 @@
 ha-cluster-lvm
 =========
 
-Role for configuring Highly Available LVM (HA-LVM) in rgmanager/pacemaker cluster
+Role for enabling Highly Available LVM (HA-LVM) configuration in rgmanager/pacemaker cluster.
+Note: previous versions of this role were creating shared VGs, newer version don't do that anymore.
 
 Requirements
 ------------
 
 RHEL: It is expected that machines will already be registered and subscribed for access to 'High Availability' or 'Resilient storage' channels.
-CentOS 5.xx: requires installation of python-simplejson.x86_64 package prior to ansible run.
 
 Role Variables
 --------------
-
-  - path to device shared between nodes, the path must be same on both nodes
-
-    ```
-    shared_drive: '/dev/disk/by-path/ip-192.168.34.153:3260-iscsi-iqn.1994-05.com.redhat:target-lun-0'
-    ```
-
-  - name of VG that will be clustered between nodes
-  
-    ```
-    cluster_vg_name: "cluster_vg"
-    ```
 
   - type of HA-LVM, possible options are 'tagging' or 'clvm'. Default is 'tagging'
   
@@ -30,10 +18,10 @@ Role Variables
     HALVMtype: "tagging"
     ```
 
-  - list of VGs enclosed in '"' and separated by ','. This will become part of 'volume_list' variable in /etc/lvm/lvm.conf and must end with ','!. NOTE: this setting is ignored whe the HALVMtype is 'clvm' as the 'volume_list' gets commented out.
+  - (optional) - this is applied only when 'tagging' mode is selected. List of VGs that should be included in 'volume_list' additionally to VG on which root filesystem resides. By default this list is empty, below example shows how to specify the list of VGs.
   
     ```
-    local_volume_list: '"c6vg",'
+    local_vg_list: [ 'vg1', 'vg2' ]
     ```
 
   - (EL6 with tagging) type of running cluster is required to determine correct volume_list. Only 2 possible options are 'pacemaker' and 'rgmanager'. Default is unset.
@@ -55,17 +43,23 @@ Role Variables
 Example Playbook
 ----------------
 
-Example playbook for tagging HA-LVM with VG name 'cluster_vg' and with single local VG named 'c6vg'.
+Example playbook for tagging HA-LVM.
 
     - hosts: servers
       roles:
-         - { role: "OndrejHome.ha-cluster-lvm", HALVMtype: "tagging", local_volume_list: '"c6vg"', cluster_vg_name: "cluster_vg", shared_drive: '/dev/disk/by-path/ip-192.168.34.153:3260-iscsi-iqn.1994-05.com.redhat:target-lun-0' } 
+         - { role: "OndrejHome.ha-cluster-lvm" }
+
+Example playbook for tagging HA-LVM with extra local VG names 'vg_local'.
+
+    - hosts: servers
+      roles:
+         - { role: "OndrejHome.ha-cluster-lvm", local_vg_list: [ 'vg_local' ] }
 
 Example playbook for clvm variant of HA-LVM.
 
     - hosts: servers
       roles:
-         - { role: "OndrejHome.ha-cluster-lvm", HALVMtype: "clvm", cluster_vg_name: "cluster_vg", shared_drive: '/dev/disk/by-path/ip-192.168.34.153:3260-iscsi-iqn.1994-05.com.redhat:target-lun-0' }
+         - { role: "OndrejHome.ha-cluster-lvm", HALVMtype: "clvm" }
 
 License
 -------

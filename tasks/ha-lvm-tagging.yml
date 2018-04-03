@@ -1,32 +1,20 @@
 ---
-- name: disable and stop clvmd service
-  service: name=clvmd enabled=no state=stopped
-  when: ansible_distribution_major_version < "7"
-  ignore_errors: True
-
-- name: enable locking_type=1
+- name: Enable locking_type=1
   lineinfile: dest=/etc/lvm/lvm.conf regexp="^\s*locking_type" line="        locking_type = 1"
   notify:
     - rebuild initramfs
     - rebuild initrd
 
-- name: EL5-6 (rgmanager) set the volume_list in /etc/lvm/lvm.conf
-  lineinfile:  dest=/etc/lvm/lvm.conf state=present regexp="^\s+volume_list" line='        volume_list=[{{ local_volume_list }} "@{{ansible_fqdn.split('.')[0] }}"]' insertafter="^activation {"
+- name: Include variables for rgmanager clusters on RHEL 5/6
+  include_vars: rgmanager.yml
   when: (ansible_distribution_major_version == "6" and cluster_type == "rgmanager") or ansible_distribution_major_version == "5"
+
+- name: Include variables for pacemaker clusters on RHEL 6
+  include_vars: pacemaker.yml
+  when: ansible_distribution_major_version == "6" and cluster_type == "pacemaker"
+
+- name: Configure volume_list in /etc/lvm/lvm.conf
+  lineinfile:  dest=/etc/lvm/lvm.conf state=present regexp="^\s+volume_list" line='        volume_list=[ "{{ [ root_vg ]|union(local_vg_list|default([]))|union(additional_volumes|default([]))|join(\'","\') }}" ]' insertafter="^activation {"
   notify:
     - rebuild initramfs
     - rebuild initrd
-
-- name: EL6 (pacemaker) set the volume_list in /etc/lvm/lvm.conf
-  lineinfile:  dest=/etc/lvm/lvm.conf state=present regexp="^\s+volume_list" line='        volume_list=[{{ local_volume_list }} "@pacemaker"]' insertafter="^activation {"
-  when: ansible_distribution_major_version == "6" and cluster_type == "pacemaker"
-  notify:  rebuild initramfs
-
-- name: EL7 (pacemaker) set the volume_list in /etc/lvm/lvm.conf
-  lineinfile:  dest=/etc/lvm/lvm.conf state=present regexp="^\s+volume_list" line='        volume_list=[{{ local_volume_list }} "" ]' insertafter="^activation {"
-  when: ansible_distribution_major_version == "7"
-  notify: rebuild initramfs
-
-- name: create VG
-  lvg: pvs={{ shared_drive }} state=present vg={{ cluster_vg_name }} vg_options=" -cn"
-  run_once: true

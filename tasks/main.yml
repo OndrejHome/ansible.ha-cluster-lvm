@@ -1,17 +1,9 @@
 ---
-## check if storage is where it should be
-- name: Check existence of shared device
-  stat: path={{ shared_drive }}
-  register: shared_device_check
-- fail: msg="Shared device doesn't exist on on node"
-  when: shared_device_check.stat.exists != True
-
 - name: Check if cluster_type is defined when running EL6
   fail: msg="cluster_type must be defined on EL6 for tagging variant"
   when: ansible_distribution_major_version == "6" and not cluster_type and HALVMtype == "tagging"
 
-## disable LVM metadata service
-- name: disable use_lvmetad in /etc/lvm/lvm.conf if it exists
+- name: Disable use_lvmetad in /etc/lvm/lvm.conf if it exists
   lineinfile:  dest=/etc/lvm/lvm.conf regexp="^\s+use_lvmetad" line='        use_lvmetad = 0'
   notify:
     - rebuild initramfs
@@ -19,13 +11,13 @@
 
 - name: Disable lvm2-lvmetad service
   service: name=lvm2-lvmetad enabled=no state=stopped
-  when: ansible_distribution_major_version == "7"
+  ignore_errors: True
+  # ignore failures as in the earlier version of EL6 the service didn't existed
 
-## setup HA-LVM tagging
 - name: Setup HA-LVM tagging
-  include: ha-lvm-tagging.yml
+  include_tasks: ha-lvm-tagging.yml
   when: HALVMtype == "tagging"
 
 - name: Setup HA-LVM CLVM
-  include: ha-lvm-clvm.yml
+  include_tasks: ha-lvm-clvm.yml
   when: HALVMtype == "clvm"

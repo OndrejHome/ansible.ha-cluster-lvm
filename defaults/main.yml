@@ -1,19 +1,15 @@
-# Path to device shared between nodes, the path must be same on both nodes
-shared_drive: '/dev/disk/by-path/ip-192.168.34.153:3260-iscsi-iqn.1994-05.com.redhat:target-lun-0'
-
-# name of VG that will be clustered between nodes
-cluster_vg_name: "cluster_vg"
-
 # type of HA-LVM, possible options are 'tagging'(default) or 'clvm'
 HALVMtype: "tagging"
 
-# list of VGs enclosed in '"' and separated by ','. This will become part of 'volume_list'
-# variable in /etc/lvm/lvm.conf and must end with ','!
-# (default) - expression below detects all VGs on system and use them (available since Ansible 2.0)
-local_volume_list: "{% for i in ansible_lvm['vgs'] %}\"{{ i }}\", {% endfor %}"
-# some examples
-# local_volume_list: '"root_vg", '
-# local_volume_list: '"root_vg", "data_vg", '
+# List of localy activated VGs
+# This role will automatically detect the VG of root filesystem when used.
+#
+# local_vg_list: ['some_vg1', 'some_vg2' ]
+# local_vg_list:
+# - some_vg1
+# - some_vg2
+# when specified in inventory, then
+# 192.168.xx.xx local_vg_list="['some_vg1','some_vg2']"
 
 # (EL6 only) Type of cluster that will use this HA-LVM. Either 'pacemaker' or 'rgmanager'
 # cluster_type: 'rgmanager'
