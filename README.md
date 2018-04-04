@@ -2,7 +2,7 @@ ha-cluster-lvm
 =========
 
 Role for enabling Highly Available LVM (HA-LVM) configuration in rgmanager/pacemaker cluster.
-Note: previous versions of this role were creating shared VGs, newer version don't do that anymore.
+This role can also create LVs and VGs for both tagging and clvm variant, check the examples to see how.
 
 Requirements
 ------------
@@ -60,6 +60,50 @@ Example playbook for clvm variant of HA-LVM.
     - hosts: servers
       roles:
          - { role: "OndrejHome.ha-cluster-lvm", HALVMtype: "clvm" }
+
+Example of playbook for tagged variant with one VG and one LV on whole VG.
+
+    - hosts: servers
+      vars:
+        tagging_vgs:
+          - vg_shared:
+            name: 'vg_shared'
+            pvs: /dev/sdb
+            lvs:
+              - lv_name3:
+                name: 'lv_name5'
+                size: 100%FREE
+
+
+Example playbook for clvm variant combined with tagging variant and creation of VGs/LVs for both clustered and tagging VGs.
+
+    - hosts: servers
+      vars:
+        local_vg_list:
+          - 'vg_clvm'
+        clvm_vgs:
+          - vg_clvmd:
+            name: 'vg_clvm'
+            pvs: /dev/sdb2
+            lvs:
+              - lv_name1:
+                name: 'lv_name1'
+                size: 200
+              - lv_name2:
+                name: 'lv_name2'
+                size: 100
+        tagging_vgs:
+          - vg_shared:
+            name: 'vg_shared'
+            pvs: /dev/sdb1
+            lvs:
+              - lv_name3:
+                name: 'lv_name3'
+                size: 200
+              - lv_name4:
+                name: 'lv_name4'
+                size: 100
+
 
 License
 -------

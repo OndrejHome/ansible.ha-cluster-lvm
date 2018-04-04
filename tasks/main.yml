@@ -28,3 +28,11 @@
 - name: Setup HA-LVM CLVM
   include_tasks: ha-lvm-clvm.yml
   when: HALVMtype == "clvm"
+
+- name: Configure tagging type VGs/LVs
+  include_tasks: create_tagging_vgs_lvs.yml
+  when: tagging_vgs is defined
+
+- name: Configure clvm type VGs/LVs
+  include_tasks: create_clvm_vgs_lvs.yml
+  when: clvm_vgs is defined and HALVMtype == "clvm"

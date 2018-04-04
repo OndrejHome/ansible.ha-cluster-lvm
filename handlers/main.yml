@@ -1,4 +1,20 @@
 ---
+- name: deactivate LV
+  command: lvchange -an "{{ item.0.name }}/{{ item.1.name }}" --deltag pacemaker
+  with_subelements:
+    - "{{ tagging_vgs }}"
+    - lvs
+
+- name: deactivate VG
+  command: vgchange -an "{{ item.name }}"
+  with_items:
+    - "{{ tagging_vgs }}"
+
+- name: remove VG tag
+  command: vgchange --deltag pacemaker "{{ item.name }}"
+  with_items:
+    - "{{ tagging_vgs }}"
+
 - name: rebuild initramfs
   shell: "dracut -f"
   when: ansible_distribution_major_version >= "6"
