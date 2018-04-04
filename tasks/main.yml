@@ -9,6 +9,13 @@
     - rebuild initramfs
     - rebuild initrd
 
+- name: Configure volume_list in /etc/lvm/lvm.conf
+  lineinfile:  dest=/etc/lvm/lvm.conf state=present regexp="^\s+volume_list" line='        volume_list=[ "{{ [ root_vg ]|union(local_vg_list|default([]))|union(additional_volumes|default([]))|join(\'","\') }}" ]' insertafter="^activation {"
+  notify:
+    - rebuild initramfs
+    - rebuild initrd
+  when: HALVMtype == "tagging" or local_vg_list is defined
+
 - name: Disable lvm2-lvmetad service
   service: name=lvm2-lvmetad enabled=no state=stopped
   ignore_errors: True
