@@ -66,12 +66,10 @@ Example of playbook for tagged variant with one VG and one LV on whole VG.
     - hosts: servers
       vars:
         tagging_vgs:
-          - vg_shared:
-            name: 'vg_shared'
+          - name: 'vg_shared'
             pvs: /dev/sdb
             lvs:
-              - lv_name3:
-                name: 'lv_name5'
+              - name: 'lv_name5'
                 size: 100%FREE
 
 
@@ -82,28 +80,21 @@ Example playbook for clvm variant combined with tagging variant and creation of 
         local_vg_list:
           - 'vg_clvm'
         clvm_vgs:
-          - vg_clvmd:
-            name: 'vg_clvm'
+          - name: 'vg_clvm'
             pvs: /dev/sdb2
             lvs:
-              - lv_name1:
-                name: 'lv_name1'
+              - name: 'lv_name1'
                 size: 200
-              - lv_name2:
-                name: 'lv_name2'
+              - name: 'lv_name2'
                 size: 100
         tagging_vgs:
-          - vg_shared:
-            name: 'vg_shared'
+          - name: 'vg_shared'
             pvs: /dev/sdb1
             lvs:
-              - lv_name3:
-                name: 'lv_name3'
+              - name: 'lv_name3'
                 size: 200
-              - lv_name4:
-                name: 'lv_name4'
+              - name: 'lv_name4'
                 size: 100
-
 
 License
 -------
@@ -113,7 +104,8 @@ GPLv3
 Author Information
 ------------------
 
-WARNING: this is alpha-version quality proof-of-concept role that still needs some polishing. 
-         This is suitable for testing purposes only.
+WARNING: While this was tested on newest CentOS/RHEL 6.9 and 7.4 and is used by
+  the Author regularly, you should be careful when using this. In worst case the
+  wrong detection of root VG may fail and cause issues.
 
 To get in touch with author you can use email ondrej-xa2iel8u@famera.cz or create a issue on github when requesting some feature.
