@@ -1,6 +1,9 @@
 ---
 - name: Enable locking_type=1
-  lineinfile: dest=/etc/lvm/lvm.conf regexp="^\s*locking_type" line="        locking_type = 1"
+  lineinfile:
+    dest: '/etc/lvm/lvm.conf'
+    regexp: '^\s*locking_type'
+    line: '        locking_type = 1'
   notify:
     - rebuild initramfs
     - rebuild initrd

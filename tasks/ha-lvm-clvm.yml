@@ -8,29 +8,45 @@
   when: enable_eus_repos == true and ansible_distribution == 'RedHat'
 
 - name: Install packages for CLVM
-  yum: name=lvm2-cluster state=installed
+  yum:
+    name: 'lvm2-cluster'
+    state: 'installed'
 
 - name: Enable locking_type=3
-  lineinfile: dest=/etc/lvm/lvm.conf regexp="^\s*locking_type" line="        locking_type = 3"
+  lineinfile:
+    dest: '/etc/lvm/lvm.conf'
+    regexp: '^\s*locking_type'
+    line: '        locking_type = 3'
   notify:
     - rebuild initramfs
     - rebuild initrd
 
 - name: Enable and start clvmd service
-  service: name=clvmd enabled=yes state=started
+  service:
+    name: 'clvmd'
+    enabled: true
+    state: 'started'
   when: ansible_distribution_major_version < "7"
 
 - name: Create controld pacemaker resource
-  pcs_resource: name="controld" resource_type="controld" options="clone interleave=true ordered=true"
+  pcs_resource:
+    name: 'controld'
+    resource_type: 'controld'
+    options: 'clone interleave=true ordered=true'
   when: ansible_distribution_major_version == "7"
   run_once: true
 
 - name: Create clvm pacemaker resource
-  pcs_resource: name="clvm" resource_type="clvm" options="clone interleave=true ordered=true"
+  pcs_resource:
+    name: 'clvm'
+    resource_type: 'clvm'
+    options: 'clone interleave=true ordered=true'
   when: ansible_distribution_major_version == "7"
   run_once: true
 
 - name: Ensure that controld resource starts before clvm resource
-  pcs_constraint_order: resource1="controld-clone" resource2="clvm-clone"
+  pcs_constraint_order:
+    resource1: 'controld-clone'
+    resource2: 'clvm-clone'
   when: ansible_distribution_major_version == "7"
   run_once: true

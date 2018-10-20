@@ -11,6 +11,7 @@
   with_items:
     - "{{ tagging_vgs }}"
   run_once: True
+
 - name: create one LV on pacemaker activated VG
   lvol:
     vg: "{{ item.0.name }}"

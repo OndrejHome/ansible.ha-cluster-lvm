@@ -1,23 +1,35 @@
 ---
 - name: Check if cluster_type is defined when running EL6
-  fail: msg="cluster_type must be defined on EL6 for tagging variant"
+  fail:
+    msg: 'cluster_type must be defined on EL6 for tagging variant'
   when: ansible_distribution_major_version == "6" and not cluster_type and HALVMtype == "tagging"
 
 - name: Disable use_lvmetad in /etc/lvm/lvm.conf if it exists
-  lineinfile:  dest=/etc/lvm/lvm.conf regexp="^\s+use_lvmetad" line='        use_lvmetad = 0'
+  lineinfile:
+    dest: '/etc/lvm/lvm.conf'
+    regexp: '^\s+use_lvmetad'
+    line: '        use_lvmetad = 0'
   notify:
     - rebuild initramfs
     - rebuild initrd
 
 - name: Configure volume_list in /etc/lvm/lvm.conf
-  lineinfile:  dest=/etc/lvm/lvm.conf state=present regexp="^\s+volume_list" line='        volume_list=[ "{{ [ root_vg ]|union(local_vg_list|default([]))|union(additional_volumes|default([]))|join(\'","\') }}" ]' insertafter="^activation {"
+  lineinfile:
+    dest: '/etc/lvm/lvm.conf'
+    state: 'present'
+    regexp: '^\s+volume_list\s*='
+    line: "        volume_list = [ \"{{ [ root_vg ]|union(local_vg_list|default([]))|union(additional_volumes|default([]))|join('\",\"'|safe) }}\" ]"
+    insertafter: '^activation {'
   notify:
     - rebuild initramfs
     - rebuild initrd
   when: HALVMtype == "tagging" or local_vg_list is defined
 
 - name: Disable lvm2-lvmetad service
-  service: name=lvm2-lvmetad enabled=no state=stopped
+  service:
+    name: 'lvm2-lvmetad'
+    enabled: false
+    state: 'stopped'
   ignore_errors: True
   # ignore failures as in the earlier version of EL6 the service didn't existed
 
