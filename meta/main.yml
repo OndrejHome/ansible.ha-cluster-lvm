@@ -1,6 +1,6 @@
 ---
 galaxy_info:
-  author: Ondrej Faměra 
+  author: Ondrej Faměra
   description: Setup HA-LVM (tagging/clvmd) on rgmanager/pacemaker cluster for EL
   license: GPLv3
   min_ansible_version: 2.4
@@ -12,8 +12,9 @@ galaxy_info:
     - 7
   galaxy_tags:
   - clustering
-  - clustering:rgmanager
-  - clustering:pacemaker
-  - clustering:halvm
+  - rgmanager
+  - pacemaker
+  - halvm
+  - lvm
 dependencies:
   - { role: OndrejHome.pcs-modules-2 }

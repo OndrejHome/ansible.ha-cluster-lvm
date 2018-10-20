@@ -15,7 +15,7 @@ Role Variables
   - type of HA-LVM, possible options are 'tagging' or 'clvm'. Default is 'tagging'
   
     ```
-    HALVMtype: "tagging"
+    HALVMtype: 'tagging'
     ```
 
   - (optional) - this is applied only when 'tagging' mode is selected. List of VGs that should be included in 'volume_list' additionally to VG on which root filesystem resides. By default this list is empty, below example shows how to specify the list of VGs.
@@ -47,19 +47,19 @@ Example playbook for tagging HA-LVM.
 
     - hosts: servers
       roles:
-         - { role: "OndrejHome.ha-cluster-lvm" }
+         - { role: 'OndrejHome.ha-cluster-lvm' }
 
 Example playbook for tagging HA-LVM with extra local VG names 'vg_local'.
 
     - hosts: servers
       roles:
-         - { role: "OndrejHome.ha-cluster-lvm", local_vg_list: [ 'vg_local' ] }
+         - { role: 'OndrejHome.ha-cluster-lvm', local_vg_list: [ 'vg_local' ] }
 
 Example playbook for clvm variant of HA-LVM.
 
     - hosts: servers
       roles:
-         - { role: "OndrejHome.ha-cluster-lvm", HALVMtype: "clvm" }
+         - { role: 'OndrejHome.ha-cluster-lvm', HALVMtype: 'clvm' }
 
 Example of playbook for tagged variant with one VG and one LV on whole VG.
 
@@ -67,10 +67,10 @@ Example of playbook for tagged variant with one VG and one LV on whole VG.
       vars:
         tagging_vgs:
           - name: 'vg_shared'
-            pvs: /dev/sdb
+            pvs: '/dev/sdb'
             lvs:
               - name: 'lv_name5'
-                size: 100%FREE
+                size: '100%FREE'
 
 
 Example playbook for clvm variant combined with tagging variant and creation of VGs/LVs for both clustered and tagging VGs.
@@ -81,20 +81,20 @@ Example playbook for clvm variant combined with tagging variant and creation of 
           - 'vg_clvm'
         clvm_vgs:
           - name: 'vg_clvm'
-            pvs: /dev/sdb2
+            pvs: '/dev/sdb2'
             lvs:
               - name: 'lv_name1'
-                size: 200
+                size: '200'
               - name: 'lv_name2'
-                size: 100
+                size: '100'
         tagging_vgs:
           - name: 'vg_shared'
-            pvs: /dev/sdb1
+            pvs: '/dev/sdb1'
             lvs:
               - name: 'lv_name3'
-                size: 200
+                size: '200'
               - name: 'lv_name4'
-                size: 100
+                size: '100'
 
 License
 -------

@@ -1,5 +1,5 @@
 # Detect if the root file system is on LVM and if so detect which VG it uses
-# LOGINC:
+# LOGIC:
 # for mount in ansible_mounts - iterate through all mountpoints
 #   if mount['mount'] == '/' - once the root filesystem mountpoint is found
 #     for i in ansible_lvm['lvs'] - iterate through all LVs in 'lvs'
