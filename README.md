@@ -47,19 +47,19 @@ Example playbook for tagging HA-LVM.
 
     - hosts: servers
       roles:
-         - { role: 'OndrejHome.ha-cluster-lvm' }
+         - { role: 'ondrejhome.ha-cluster-lvm' }
 
 Example playbook for tagging HA-LVM with extra local VG names 'vg_local'.
 
     - hosts: servers
       roles:
-         - { role: 'OndrejHome.ha-cluster-lvm', local_vg_list: [ 'vg_local' ] }
+         - { role: 'ondrejhome.ha-cluster-lvm', local_vg_list: [ 'vg_local' ] }
 
 Example playbook for clvm variant of HA-LVM.
 
     - hosts: servers
       roles:
-         - { role: 'OndrejHome.ha-cluster-lvm', HALVMtype: 'clvm' }
+         - { role: 'ondrejhome.ha-cluster-lvm', HALVMtype: 'clvm' }
 
 Example of playbook for tagged variant with one VG and one LV on whole VG.
 

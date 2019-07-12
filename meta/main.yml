@@ -17,4 +17,4 @@ galaxy_info:
   - halvm
   - lvm
 dependencies:
-  - { role: OndrejHome.pcs-modules-2 }
+  - { role: ondrejhome.pcs-modules-2 }
