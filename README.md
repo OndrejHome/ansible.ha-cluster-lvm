@@ -12,7 +12,7 @@ RHEL: It is expected that machines will already be registered and subscribed for
 Role Variables
 --------------
 
-  - type of HA-LVM, possible options are 'tagging' or 'clvm'. Default is 'tagging'
+  - type of HA-LVM, possible options are 'tagging' or 'clvm' on EL6 and EL7. On EL8 the only option is 'systemid'. Default is 'tagging'
   
     ```
     HALVMtype: 'tagging'
@@ -61,6 +61,12 @@ Example playbook for clvm variant of HA-LVM.
       roles:
          - { role: 'ondrejhome.ha-cluster-lvm', HALVMtype: 'clvm' }
 
+(EL8) Example playbook for systemid variant of HA-LVM.
+
+    - hosts: servers
+      roles:
+         - { role: 'ondrejhome.ha-cluster-lvm', HALVMtype: 'systemid' }
+
 Example of playbook for tagged variant with one VG and one LV on whole VG.
 
     - hosts: servers
@@ -95,6 +101,17 @@ Example playbook for clvm variant combined with tagging variant and creation of 
                 size: '200'
               - name: 'lv_name4'
                 size: '100'
+
+Example of playbook for systemid variant on EL8 with one VG and one LV on whole VG.
+
+    - hosts: servers
+      vars:
+        systemid_vgs:
+          - name: 'vg_systemid'
+            pvs: '/dev/sdb'
+            lvs:
+              - name: 'lv_name5'
+                size: '100%FREE'
 
 License
 -------

@@ -4,6 +4,11 @@
     msg: 'cluster_type must be defined on EL6 for tagging variant'
   when: ansible_distribution_major_version == "6" and not cluster_type and HALVMtype == "tagging"
 
+- name: Check if proper HALVMtype is selected for EL8 platform
+  fail:
+    msg: 'On EL8 you have use HALVMtype:"systemid" at the moment.'
+  when: ansible_distribution_major_version == "8" and HALVMtype != "systemid"
+
 - name: Disable use_lvmetad in /etc/lvm/lvm.conf if it exists
   lineinfile:
     dest: '/etc/lvm/lvm.conf'
@@ -12,6 +17,8 @@
   notify:
     - rebuild initramfs
     - rebuild initrd
+  when: ansible_distribution_major_version in [ "6", "7" ]
+  # no use_lvmetad in RHEL8
 
 - name: Configure volume_list in /etc/lvm/lvm.conf
   lineinfile:
@@ -23,7 +30,7 @@
   notify:
     - rebuild initramfs
     - rebuild initrd
-  when: HALVMtype == "tagging" or local_vg_list is defined
+  when: ansible_distribution_major_version in [ "6", "7" ] and HALVMtype == "tagging" or local_vg_list is defined
 
 - name: Disable lvm2-lvmetad service
   service:
@@ -32,6 +39,8 @@
     state: 'stopped'
   ignore_errors: True
   # ignore failures as in the earlier version of EL6 the service didn't existed
+  when: ansible_distribution_major_version in [ "6", "7" ]
+  # no lvmetad in RHEL8
 
 - name: Setup HA-LVM tagging
   include_tasks: ha-lvm-tagging.yml
@@ -41,6 +50,10 @@
   include_tasks: ha-lvm-clvm.yml
   when: HALVMtype == "clvm"
 
+- name: Setup HA-LVM systemid
+  include_tasks: ha-lvm-systemid.yml
+  when: HALVMtype == "systemid"
+
 - name: Configure tagging type VGs/LVs
   include_tasks: create_tagging_vgs_lvs.yml
   when: tagging_vgs is defined
@@ -48,3 +61,7 @@
 - name: Configure clvm type VGs/LVs
   include_tasks: create_clvm_vgs_lvs.yml
   when: clvm_vgs is defined and HALVMtype == "clvm"
+
+- name: Configure systemid type VGs/LVs
+  include_tasks: create_systemid_vgs_lvs.yml
+  when: systemid_vgs is defined and HALVMtype == "systemid"
