@@ -1,1 +1,1 @@
-additional_volumes: [ "@pacemaker" ]
+additional_volumes: ["@pacemaker"]

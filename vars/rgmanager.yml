@@ -1,1 +1,1 @@
-additional_volumes: [ "@{{ansible_fqdn.split('.')[0] }}" ]
+additional_volumes: ["@{{ansible_fqdn.split('.')[0] }}"]

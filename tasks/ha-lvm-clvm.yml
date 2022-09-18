@@ -1,11 +1,15 @@
 ---
 - name: enable HA/RS repository
   command: subscription-manager repos --enable="rhel-rs-for-rhel-{{ ansible_distribution_major_version }}-server-rpms"
-  when: enable_repos == true and ansible_distribution == 'RedHat'
+  when:
+    - enable_repos|bool
+    - ansible_distribution == 'RedHat'
 
 - name: enable HA/RS EUS repository
   command: subscription-manager repos --enable="rhel-rs-for-rhel-{{ ansible_distribution_major_version }}-server-eus-rpms"
-  when: enable_eus_repos == true and ansible_distribution == 'RedHat'
+  when:
+    - enable_eus_repos|bool
+    - ansible_distribution == 'RedHat'
 
 - name: Install packages for CLVM
   yum:

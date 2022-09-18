@@ -5,17 +5,17 @@ galaxy_info:
   license: GPLv3
   min_ansible_version: 2.4
   platforms:
-  - name: EL
-    versions:
-    - 5
-    - 6
-    - 7
-    - 8
+    - name: EL
+      versions:
+        - 5
+        - 6
+        - 7
+        - 8
   galaxy_tags:
-  - clustering
-  - rgmanager
-  - pacemaker
-  - halvm
-  - lvm
+    - clustering
+    - rgmanager
+    - pacemaker
+    - halvm
+    - lvm
 dependencies:
-  - { role: ondrejhome.pcs-modules-2 }
+  - {role: ondrejhome.pcs-modules-2}
