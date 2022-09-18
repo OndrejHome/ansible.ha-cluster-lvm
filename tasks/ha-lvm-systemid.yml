@@ -4,7 +4,7 @@
     dest: '/etc/lvm/lvm.conf'
     regexp: '^\s*system_id_source'
     line: '       system_id_source = "uname"'
-    insertafter: '^activation {'
+    insertafter: '^global {'
   notify:
     - rebuild initramfs
 
