@@ -12,7 +12,7 @@ RHEL: It is expected that machines will already be registered and subscribed for
 Role Variables
 --------------
 
-  - type of HA-LVM, possible options are 'tagging' or 'clvm' on EL6 and EL7. On EL8 the only option is 'systemid'. Default is 'tagging'
+  - type of HA-LVM, possible options are 'tagging' or 'clvm' on EL6 and EL7. On EL8/EL9 the only option is 'systemid'. Default is 'tagging'
   
     ```
     HALVMtype: 'tagging'
@@ -130,5 +130,7 @@ Author Information
 WARNING: While this was tested on newest CentOS/RHEL 6.9 and 7.4 and is used by
   the Author regularly, you should be careful when using this. In worst case the
   wrong detection of root VG may fail and cause issues.
+
+Additionally tested on: RHEL 8.2/8.6/9.0, AlmaLinux 8.6/9.0 with systemid approach
 
 To get in touch with author you can use email ondrej-xa2iel8u@famera.cz or create a issue on github when requesting some feature.

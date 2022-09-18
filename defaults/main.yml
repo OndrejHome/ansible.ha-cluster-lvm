@@ -1,7 +1,7 @@
 # type of HA-LVM, possible options are:
 # on EL6 and EL7:
 # -'tagging' (default) or 'clvm'
-# on EL 8:
+# on EL 8 and EL9:
 # - 'systemid'
 HALVMtype: "tagging"
 
