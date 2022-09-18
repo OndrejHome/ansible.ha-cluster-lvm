@@ -7,6 +7,17 @@
   notify:
     - rebuild initramfs
 
+- name: Configure auto_activation_volume_list in /etc/lvm/lvm.conf (EL 8.0-8.4)
+  lineinfile:
+    dest: '/etc/lvm/lvm.conf'
+    state: 'present'
+    regexp: '^\s+auto_activation_volume_list\s*='
+    line: "        auto_activation_volume_list = [ \"{{ [ root_vg ]|union(local_vg_list|default([]))|union(additional_volumes|default([]))|join('\",\"'|safe) }}\" ]"
+    insertafter: '^activation {'
+  notify:
+    - rebuild initramfs
+  when: ansible_distribution_version in [ "8.0","8.1","8.2","8.3","8.4" ]
+
 - name: get 'uname -n'
   command: uname -n
   register: lvm_uname
