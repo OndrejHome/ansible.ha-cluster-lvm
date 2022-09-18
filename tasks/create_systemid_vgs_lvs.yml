@@ -1,8 +1,15 @@
 ---
+- name: Use extra options when creating VG on EL 8.5+
+  set_fact:
+    extra_vg_options: "--setautoactivation n"
+  when:
+    - ansible_distribution_version is version('8.5', '>=')
+
 - name: create systemid VG
   lvg:
     vg: "{{ item.name }}"
     pvs: "{{ item.pvs }}"
+    vg_options: "{{ extra_vg_options | default(omit) }}"
   with_items:
     - "{{ systemid_vgs }}"
   run_once: True
