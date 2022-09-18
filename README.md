@@ -76,7 +76,9 @@ Example of playbook for tagged variant with one VG and one LV on whole VG.
             pvs: '/dev/sdb'
             lvs:
               - name: 'lv_name5'
-                size: '100%FREE'
+                size: '200M'
+      roles:
+         - { role: 'ondrejhome.ha-cluster-lvm' }
 
 
 Example playbook for clvm variant combined with tagging variant and creation of VGs/LVs for both clustered and tagging VGs.
@@ -90,17 +92,19 @@ Example playbook for clvm variant combined with tagging variant and creation of 
             pvs: '/dev/sdb2'
             lvs:
               - name: 'lv_name1'
-                size: '200'
+                size: '200M'
               - name: 'lv_name2'
-                size: '100'
+                size: '100M'
         tagging_vgs:
           - name: 'vg_shared'
             pvs: '/dev/sdb1'
             lvs:
               - name: 'lv_name3'
-                size: '200'
+                size: '200M'
               - name: 'lv_name4'
-                size: '100'
+                size: '100M'
+      roles:
+         - { role: 'ondrejhome.ha-cluster-lvm', HALVMtype: 'clvm' }
 
 Example of playbook for systemid variant on EL8 with one VG and one LV on whole VG.
 
@@ -111,7 +115,9 @@ Example of playbook for systemid variant on EL8 with one VG and one LV on whole 
             pvs: '/dev/sdb'
             lvs:
               - name: 'lv_name5'
-                size: '100%FREE'
+                size: '200M'
+      roles:
+         - { role: 'ondrejhome.ha-cluster-lvm', HALVMtype: 'systemid }
 
 License
 -------
