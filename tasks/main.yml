@@ -4,10 +4,12 @@
     msg: 'cluster_type must be defined on EL6 for tagging variant'
   when: ansible_distribution_major_version == "6" and not cluster_type and HALVMtype == "tagging"
 
-- name: Check if proper HALVMtype is selected for EL8 platform
+- name: Check if proper HALVMtype is selected for EL8/EL9 platform
   fail:
-    msg: 'On EL8 you have use HALVMtype:"systemid" at the moment.'
-  when: ansible_distribution_major_version == "8" and HALVMtype != "systemid"
+    msg: 'On EL8/EL9 you have use "systemid" or "lvmlockd" HALVMtype.'
+  when:
+    - ansible_distribution_major_version in ["8","9"]
+    - not (HALVMtype in ['systemid','lvmlockd'])
 
 - name: Disable use_lvmetad in /etc/lvm/lvm.conf if it exists
   lineinfile:
@@ -18,7 +20,7 @@
     - rebuild initramfs
     - rebuild initrd
   when: ansible_distribution_major_version in [ "6", "7" ]
-  # no use_lvmetad in RHEL8
+  # no use_lvmetad in RHEL8/9
 
 - name: Configure volume_list in /etc/lvm/lvm.conf
   lineinfile:
@@ -54,6 +56,10 @@
   include_tasks: ha-lvm-systemid.yml
   when: HALVMtype == "systemid"
 
+- name: Setup HA-LVM lvmlockd
+  include_tasks: ha-lvm-lockd.yml
+  when: HALVMtype == "lvmlockd"
+
 - name: Configure tagging type VGs/LVs
   include_tasks: create_tagging_vgs_lvs.yml
   when: tagging_vgs is defined
@@ -65,3 +71,7 @@
 - name: Configure systemid type VGs/LVs
   include_tasks: create_systemid_vgs_lvs.yml
   when: systemid_vgs is defined and HALVMtype == "systemid"
+
+- name: Configure lvmlockd type VGs/LVs
+  include_tasks: create_lvmlockd_vgs_lvs.yml
+  when: lvmlockd_vgs is defined and HALVMtype == "lvmlockd"

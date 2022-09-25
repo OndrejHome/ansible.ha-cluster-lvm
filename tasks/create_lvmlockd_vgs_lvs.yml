@@ -1,0 +1,22 @@
+---
+- name: create clustered VG (lvmlockd)
+  lvg:
+    vg: "{{ item.name }}"
+    pvs: "{{ item.pvs }}"
+    vg_options: '--shared'
+  with_items:
+    - "{{ lvmlockd_vgs }}"
+  run_once: true
+
+- name: create LV on clustered VG (lvmlockd)
+  lvol:
+    vg: "{{ item.0.name }}"
+    lv: "{{ item.1.name }}"
+    size: "{{ item.1.size }}"
+  with_subelements:
+    - "{{ lvmlockd_vgs }}"
+    - lvs
+  run_once: true
+
+# FIXME: because 'use_devicesfile' defaults to '1' in EL9 the other nodes
+# requires use of 'lvmdevices --adddev <pv>' to allow shared VG to be seen/used

@@ -2,7 +2,7 @@
 # on EL6 and EL7:
 # -'tagging' (default) or 'clvm'
 # on EL 8 and EL9:
-# - 'systemid'
+# - 'systemid' or 'lvmlockd'
 HALVMtype: "tagging"
 
 # List of localy activated VGs

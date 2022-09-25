@@ -12,7 +12,7 @@ RHEL: It is expected that machines will already be registered and subscribed for
 Role Variables
 --------------
 
-  - type of HA-LVM, possible options are 'tagging' or 'clvm' on EL6 and EL7. On EL8/EL9 the only option is 'systemid'. Default is 'tagging'
+  - type of HA-LVM, possible options are 'tagging' or 'clvm' on EL6 and EL7, 'systemid' or 'lvmlockd' on EL8 and EL9. Default is 'tagging'
   
     ```
     HALVMtype: 'tagging'
@@ -61,11 +61,17 @@ Example playbook for clvm variant of HA-LVM.
       roles:
          - { role: 'ondrejhome.ha-cluster-lvm', HALVMtype: 'clvm' }
 
-(EL8) Example playbook for systemid variant of HA-LVM.
+Example playbook for systemid variant of HA-LVM.
 
     - hosts: servers
       roles:
          - { role: 'ondrejhome.ha-cluster-lvm', HALVMtype: 'systemid' }
+
+Example playbook for lvmlockd variant of HA-LVM.
+
+    - hosts: servers
+      roles:
+         - { role: 'ondrejhome.ha-cluster-lvm', HALVMtype: 'lvmlockd' }
 
 Example of playbook for tagged variant with one VG and one LV on whole VG.
 
@@ -106,7 +112,7 @@ Example playbook for clvm variant combined with tagging variant and creation of 
       roles:
          - { role: 'ondrejhome.ha-cluster-lvm', HALVMtype: 'clvm' }
 
-Example of playbook for systemid variant on EL8 with one VG and one LV on whole VG.
+Example of playbook for systemid variant with one VG and one LV on whole VG.
 
     - hosts: servers
       vars:
@@ -117,7 +123,20 @@ Example of playbook for systemid variant on EL8 with one VG and one LV on whole 
               - name: 'lv_name5'
                 size: '200M'
       roles:
-         - { role: 'ondrejhome.ha-cluster-lvm', HALVMtype: 'systemid }
+         - { role: 'ondrejhome.ha-cluster-lvm', HALVMtype: 'systemid' }
+
+Example of playbook for systemid variant with one VG and one LV on whole VG.
+
+    - hosts: servers
+      vars:
+        lvmlockd_vgs:
+          - name: 'vg_lvmlockd'
+            pvs: '/dev/sdb'
+            lvs:
+              - name: 'lv_name6'
+                size: '200M'
+      roles:
+         - { role: 'ondrejhome.ha-cluster-lvm', HALVMtype: 'lvmlockd' }
 
 License
 -------
