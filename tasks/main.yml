@@ -1,7 +1,14 @@
 ---
+- name: Check if proper HALVMtype is selected for EL6/EL7 platform
+  fail:
+    msg: "On EL6/EL7 you have to use 'tagging' or 'clmv' HALVMtype."
+  when:
+    - ansible_distribution_major_version in ["6","7"]
+    - not (HALVMtype in ['tagging','clvm'])
+
 - name: Check if proper HALVMtype is selected for EL8/EL9 platform
   fail:
-    msg: 'On EL8/EL9 you have use "systemid" or "lvmlockd" HALVMtype.'
+    msg: "On EL8/EL9 you have to use 'systemid' or 'lvmlockd' HALVMtype."
   when:
     - ansible_distribution_major_version in ["8","9"]
     - not (HALVMtype in ['systemid','lvmlockd'])

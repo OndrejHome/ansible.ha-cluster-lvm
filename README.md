@@ -12,7 +12,10 @@ RHEL: It is expected that machines will already be registered and subscribed for
 Role Variables
 --------------
 
-  - type of HA-LVM, possible options are 'tagging' or 'clvm' on EL6 and EL7, 'systemid' or 'lvmlockd' on EL8 and EL9. Default is 'tagging'
+  - type of HA-LVM:
+     - (EL6, EL7) possible options are 'tagging' or 'clvm'
+     - (EL8, EL9) possible options are 'systemid' or 'lvmlockd'
+     - default is 'tagging'
   
     ```
     HALVMtype: 'tagging'
