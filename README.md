@@ -27,12 +27,20 @@ Role Variables
     local_vg_list: [ 'vg1', 'vg2' ]
     ```
 
-  - (RHEL only) enable the repositories containint packages needed
+  - (RHEL only) enable the repositories containing needed packages:
+      - on RHEL6 enable `rhel-rs-for-rhel-6-server-rpms`
+      - on RHEL7 enable `rhel-rs-for-rhel-7-server-rpms`
+      - on RHEL8 enable `rhel-8-for-x86_64-resilientstorage-rpms`
+      - on RHEL9 enable `rhel-9-for-x86_64-resilientstorage-rpms`
     ```
     enable_repos: true
     ```
 
-  - (RHEL only) enable the extended update (EUS) repositories containint packages needed
+  - (RHEL only) enable the extended update (EUS) repositories containing needed packages:
+      - on RHEL6 enable `rhel-rs-for-rhel-6-server-eus-rpms`
+      - on RHEL7 enable `rhel-rs-for-rhel-7-server-eus-rpms`
+      - on RHEL8 enable `rhel-8-for-x86_64-resilientstorage-eus-rpms`
+      - on RHEL9 enable `rhel-9-for-x86_64-resilientstorage-eus-rpms`
     ```
     enable_eus_repos: false
     ```
