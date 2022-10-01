@@ -13,4 +13,4 @@
           - name: 'lv_name5'
             size: '200M'
   roles:
-     - { role: 'ondrejhome.ha_cluster_lvm_rgmanager', HALVMtype: 'clvm' }
+     - { role: 'ondrejhome.ha-cluster-lvm', HALVMtype: 'clvm' }
