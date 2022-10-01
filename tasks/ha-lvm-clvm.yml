@@ -23,14 +23,13 @@
     line: '        locking_type = 3'
   notify:
     - rebuild initramfs
-    - rebuild initrd
 
-- name: Enable and start clvmd service
+- name: Enable and start clvmd service (EL6)
   service:
     name: 'clvmd'
     enabled: true
     state: 'started'
-  when: ansible_distribution_major_version < "7"
+  when: ansible_distribution_major_version == "6"
 
 - name: Create controld pacemaker resource
   pcs_resource:

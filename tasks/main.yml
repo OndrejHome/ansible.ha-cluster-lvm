@@ -1,9 +1,4 @@
 ---
-- name: Check if cluster_type is defined when running EL6
-  fail:
-    msg: 'cluster_type must be defined on EL6 for tagging variant'
-  when: ansible_distribution_major_version == "6" and not cluster_type and HALVMtype == "tagging"
-
 - name: Check if proper HALVMtype is selected for EL8/EL9 platform
   fail:
     msg: 'On EL8/EL9 you have use "systemid" or "lvmlockd" HALVMtype.'
@@ -18,7 +13,6 @@
     line: '        use_lvmetad = 0'
   notify:
     - rebuild initramfs
-    - rebuild initrd
   when: ansible_distribution_major_version in [ "6", "7" ]
   # no use_lvmetad in RHEL8/9
 
@@ -31,7 +25,6 @@
     insertafter: '^activation {'
   notify:
     - rebuild initramfs
-    - rebuild initrd
   when: local_vg_list is defined
 
 - name: Disable lvm2-lvmetad service

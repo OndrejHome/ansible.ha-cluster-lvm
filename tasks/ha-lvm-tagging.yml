@@ -6,15 +6,10 @@
     line: '        locking_type = 1'
   notify:
     - rebuild initramfs
-    - rebuild initrd
-
-- name: Include variables for rgmanager clusters on RHEL 5/6
-  include_vars: rgmanager.yml
-  when: (ansible_distribution_major_version == "6" and cluster_type == "rgmanager") or ansible_distribution_major_version == "5"
 
 - name: Include variables for pacemaker clusters on RHEL 6
   include_vars: pacemaker.yml
-  when: ansible_distribution_major_version == "6" and cluster_type == "pacemaker"
+  when: ansible_distribution_major_version == "6"
 
 - name: Configure volume_list in /etc/lvm/lvm.conf (EL6/EL7)
   lineinfile:

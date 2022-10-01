@@ -1,7 +1,7 @@
 ha-cluster-lvm
 =========
 
-Role for enabling Highly Available LVM (HA-LVM) configuration in rgmanager/pacemaker cluster.
+Role for enabling Highly Available LVM (HA-LVM) configuration in pacemaker cluster.
 This role can also create LVs and VGs for both tagging and clvm variant, check the examples to see how.
 
 Requirements
@@ -22,11 +22,6 @@ Role Variables
   
     ```
     local_vg_list: [ 'vg1', 'vg2' ]
-    ```
-
-  - (EL6 with tagging) type of running cluster is required to determine correct volume_list. Only 2 possible options are 'pacemaker' and 'rgmanager'. Default is unset.
-    ```
-    cluster_type: 'rgmanager'
     ```
 
   - (RHEL only) enable the repositories containint packages needed
