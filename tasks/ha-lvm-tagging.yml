@@ -15,3 +15,14 @@
 - name: Include variables for pacemaker clusters on RHEL 6
   include_vars: pacemaker.yml
   when: ansible_distribution_major_version == "6" and cluster_type == "pacemaker"
+
+- name: Configure volume_list in /etc/lvm/lvm.conf (EL6/EL7)
+  lineinfile:
+    dest: '/etc/lvm/lvm.conf'
+    state: 'present'
+    regexp: '^\s+volume_list\s*='
+    line: "        volume_list = [ \"{{ [ root_vg ]|union(local_vg_list|default([]))|union(additional_volumes|default([]))|join('\",\"'|safe) }}\" ]"
+    insertafter: '^activation {'
+  notify:
+    - rebuild initramfs
+  when: ansible_distribution_major_version in [ "6", "7" ]

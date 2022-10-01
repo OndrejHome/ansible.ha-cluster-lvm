@@ -22,7 +22,7 @@
   when: ansible_distribution_major_version in [ "6", "7" ]
   # no use_lvmetad in RHEL8/9
 
-- name: Configure volume_list in /etc/lvm/lvm.conf
+- name: Configure volume_list in /etc/lvm/lvm.conf (when local_vg_list is defined)
   lineinfile:
     dest: '/etc/lvm/lvm.conf'
     state: 'present'
@@ -32,7 +32,7 @@
   notify:
     - rebuild initramfs
     - rebuild initrd
-  when: ansible_distribution_major_version in [ "6", "7" ] and HALVMtype == "tagging" or local_vg_list is defined
+  when: local_vg_list is defined
 
 - name: Disable lvm2-lvmetad service
   service:
