@@ -4,6 +4,8 @@ ha-cluster-lvm
 Role for enabling Highly Available LVM (HA-LVM) configuration in pacemaker cluster.
 This role can also create LVs and VGs for both tagging and clvm variant, check the examples to see how.
 
+rgmanager-specific code was removed from this role and moved into separate role - [ondrejhome.ha_cluster_lvm_rgmanager](https://github.com/OndrejHome/ansible.ha-cluster-lvm-rgmanager).
+
 Requirements
 ------------
 
@@ -152,10 +154,9 @@ GPLv3
 Author Information
 ------------------
 
-WARNING: While this was tested on newest CentOS/RHEL 6.9 and 7.4 and is used by
-  the Author regularly, you should be careful when using this. In worst case the
-  wrong detection of root VG may fail and cause issues.
+This role was manually tested on limited number of platforms and may not cover all corner cases.
 
-Additionally tested on: RHEL 8.2/8.6/9.0, AlmaLinux 8.6/9.0 with systemid approach
+- 2022-09 tested on: RHEL 8.2/8.6/9.0, AlmaLinux 8.6/9.0 with systemid approach
+- 2022-10 tested on: CentOS 6.10, RHEL 6.10 with tagging and clvm approach
 
 To get in touch with author you can use email ondrej-xa2iel8u@famera.cz or create a issue on github when requesting some feature.
