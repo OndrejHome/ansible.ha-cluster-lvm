@@ -31,7 +31,7 @@
     dest: '/etc/lvm/lvm.conf'
     regexp: '^\s*use_lvmlockd'
     line: '        use_lvmlockd = 1'
-    insertafter: 'devices {'
+    insertafter: 'global {'
   notify:
     - rebuild initramfs
 
