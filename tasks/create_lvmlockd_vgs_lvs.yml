@@ -18,5 +18,15 @@
     - lvs
   run_once: true
 
-# FIXME: because 'use_devicesfile' defaults to '1' in EL9 the other nodes
-# requires use of 'lvmdevices --adddev <pv>' to allow shared VG to be seen/used
+- name: EL8/EL9 - Make shared VG visible on all nodes when 'use_devicesfile' is enabled
+  command: lvmdevices --adddev "{{ item.pvs }}"
+  with_items:
+    - "{{ lvmlockd_vgs }}"
+  when:
+    - ansible_distribution_major_version in ["8","9"]
+    - use_devicesfile_check is succeeded
+    - "['Device ',item.pvs,' '] | join not in lvmdevices_list.stdout"
+# typical output from 'lvmdevices looks like this'
+# ...
+#   Device /dev/sdb IDTYPE=sys_wwid IDNAME=naa.6001405fca4c3943fe54eaf96b16a195 DEVNAME=/dev/sdb PVID=YOEZbPCU1cvCOhT1OTlkUGKBsDUV0nk6
+# ...

@@ -68,6 +68,26 @@
   include_tasks: create_clvm_vgs_lvs.yml
   when: clvm_vgs is defined and HALVMtype == "clvm"
 
+- name: Check if 'use_devicesfile' is enabled on EL8/EL9 platform
+  command: /usr/sbin/lvmdevices --check
+  register: use_devicesfile_check
+  ignore_errors: true
+  changed_when: false
+  check_mode: false
+  when:
+    - ansible_distribution_major_version in ["8","9"]
+    - "(systemid_vgs is defined) or (lvmlockd_vgs is defined)"
+
+- name: Get list of defined devices from lvmdevices
+  command: lvmdevices
+  register: lvmdevices_list
+  changed_when: false
+  check_mode: false
+  when:
+    - ansible_distribution_major_version in ["8","9"]
+    - "(systemid_vgs is defined) or (lvmlockd_vgs is defined)"
+    - use_devicesfile_check is succeeded
+
 - name: Configure systemid type VGs/LVs
   include_tasks: create_systemid_vgs_lvs.yml
   when: systemid_vgs is defined and HALVMtype == "systemid"
