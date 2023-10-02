@@ -13,7 +13,7 @@
     dest: '/etc/lvm/lvm.conf'
     state: 'present'
     regexp: '^\s+auto_activation_volume_list\s*='
-    line: "        auto_activation_volume_list = [ \"{{ [ root_vg ]|union(local_vg_list|default([]))|union(additional_volumes|default([]))|join('\",\"'|safe) }}\" ]"
+    line: "        auto_activation_volume_list = [ \"{{ [root_vg] | union(local_vg_list | default([])) | union(additional_volumes | default([])) | join('\",\"' | safe) }}\" ]"
     insertafter: '^activation {'
   notify:
     - Rebuild initramfs
