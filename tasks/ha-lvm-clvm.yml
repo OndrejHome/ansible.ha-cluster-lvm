@@ -32,7 +32,7 @@
     regexp: '^\s*locking_type'
     line: '        locking_type = 3'
   notify:
-    - rebuild initramfs
+    - Rebuild initramfs
 
 - name: Enable and start clvmd service (EL6)
   service:

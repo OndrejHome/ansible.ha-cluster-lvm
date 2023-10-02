@@ -6,7 +6,7 @@
     line: '       system_id_source = "uname"'
     insertafter: '^global {'
   notify:
-    - rebuild initramfs
+    - Rebuild initramfs
 
 - name: Configure auto_activation_volume_list in /etc/lvm/lvm.conf (EL 8.0-8.4)
   lineinfile:
@@ -16,16 +16,16 @@
     line: "        auto_activation_volume_list = [ \"{{ [ root_vg ]|union(local_vg_list|default([]))|union(additional_volumes|default([]))|join('\",\"'|safe) }}\" ]"
     insertafter: '^activation {'
   notify:
-    - rebuild initramfs
+    - Rebuild initramfs
   when: ansible_distribution_version in [ "8.0","8.1","8.2","8.3","8.4" ]
 
-- name: get 'uname -n'
+- name: Get 'uname -n'
   command: uname -n
   register: lvm_uname
   changed_when: false
   check_mode: false
 
-- name: get 'lvm systemid'
+- name: Get 'lvm systemid'
   command: lvm systemid
   register: lvm_systemid
   changed_when: false

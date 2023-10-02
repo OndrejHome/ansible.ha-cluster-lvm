@@ -19,7 +19,7 @@
     regexp: '^\s+use_lvmetad'
     line: '        use_lvmetad = 0'
   notify:
-    - rebuild initramfs
+    - Rebuild initramfs
   when: ansible_distribution_major_version in [ "6", "7" ]
   # no use_lvmetad in RHEL8/9
 
@@ -31,7 +31,7 @@
     line: "        volume_list = [ \"{{ [ root_vg ]|union(local_vg_list|default([]))|union(additional_volumes|default([]))|join('\",\"'|safe) }}\" ]"
     insertafter: '^activation {'
   notify:
-    - rebuild initramfs
+    - Rebuild initramfs
   when: local_vg_list is defined
 
 - name: Disable lvm2-lvmetad service

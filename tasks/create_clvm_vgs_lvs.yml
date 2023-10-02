@@ -1,5 +1,5 @@
 ---
-- name: create clustered VG
+- name: Create clustered VG
   lvg:
     vg: "{{ item.name }}"
     pvs: "{{ item.pvs }}"
@@ -8,7 +8,7 @@
     - "{{ clvm_vgs }}"
   run_once: true
 
-- name: create LV on clustered VG
+- name: Create LV on clustered VG
   lvol:
     vg: "{{ item.0.name }}"
     lv: "{{ item.1.name }}"

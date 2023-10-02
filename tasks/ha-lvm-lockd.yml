@@ -33,7 +33,7 @@
     line: '        use_lvmlockd = 1'
     insertafter: 'global {'
   notify:
-    - rebuild initramfs
+    - Rebuild initramfs
 
 # FIXME: here is creation of old-style 2 resources with constraints,
 # new documentation (RHEL 8/9) is using cloned interleaved group instead

@@ -5,7 +5,7 @@
   when:
     - ansible_distribution_version is version('8.5', '>=')
 
-- name: create systemid VG
+- name: Create systemid VG
   lvg:
     vg: "{{ item.name }}"
     pvs: "{{ item.pvs }}"
@@ -14,7 +14,7 @@
     - "{{ systemid_vgs }}"
   run_once: true
 
-- name: create LVs on systemid VG
+- name: Create LVs on systemid VG
   lvol:
     vg: "{{ item.0.name }}"
     lv: "{{ item.1.name }}"
